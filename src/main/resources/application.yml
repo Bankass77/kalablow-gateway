@@ -1,1 +1,57 @@
-spring.application.name=kanblow-geteway
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+
+            - id: documents-imbrique
+              uri: ${SERVICE_DOCUMENTS_URL:http://service-documents:8080}
+              predicates:
+                - Path=/api/v1/dossiers/*/documents/**
+
+            - id: dossiers
+              uri: ${SERVICE_DOSSIERS_URL:http://service-dossiers:8080}
+              predicates:
+                - Path=/api/v1/dossiers/**
+
+            - id: identite
+              uri: ${SERVICE_IDENTITE_URL:http://service-identite:8080}
+              predicates:
+                - Path=/api/v1/agents/**
+
+            - id: documents
+              uri: ${SERVICE_DOCUMENTS_URL:http://service-documents:8080}
+              predicates:
+                - Path=/api/v1/documents/**
+
+            - id: textes-legaux
+              uri: ${SERVICE_TEXTES_LEGAUX_URL:http://service-textes-legaux:8080}
+              predicates:
+                - Path=/api/v1/textes-legaux/**
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+    health:
+      show-details: never
+
+  metrics:
+    tags:
+      application: kalablowBFF
+
+  tracing:
+    sampling:
+      probability: 1.0
+
+    export:
+      zipkin:
+        endpoint: ${ZIPKIN_ENDPOINT:http://zipkin:9411/api/v2/spans}

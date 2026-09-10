@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class KanblowGetewayApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(KanblowGetewayApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(KanblowGetewayApplication.class, args);
+    }
 
 }

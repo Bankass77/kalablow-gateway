@@ -1,1 +1,27 @@
-services: {}
+services:
+
+  service-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SERVICE_DOSSIERS_URL: http://service-dossiers:8080
+      SERVICE_IDENTITE_URL: http://service-identite:8080
+      SERVICE_DOCUMENTS_URL: http://service-documents:8080
+      SERVICE_TEXTES_LEGAUX_URL: http://service-textes-legaux:8080
+    ports:
+      - "8080:8080"
+    # Pas de depends_on sur les services routés : même principe de résilience
+    # que partout ailleurs dans le projet. La Gateway démarre et répond même
+    # si un service en aval est indisponible — cette requête précise échouera,
+    # pas toute la Gateway.
+
+
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
+networks:
+  default:
+    name: conseil-etat-net
+    external: true
